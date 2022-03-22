@@ -1,5 +1,9 @@
+from collections import defaultdict
 from enum import Enum, auto
 import random
+import seaborn as sns
+import matplotlib.pyplot as plt
+import pandas as pd
 
 
 class Token(Enum):
@@ -96,7 +100,7 @@ if __name__ == '__main__':
 		Token.Tablet: 1,
 		Token.Tentacle: 1,
 		Token.Star: 1,
-		Token.Curse: 1
+		Token.Curse: 0
 	}
 
 	bag = getBag(bagCount)
@@ -105,13 +109,47 @@ if __name__ == '__main__':
 	autoFailCount = 0.0
 	sumOfResults = 0.0
 
+	valDict = defaultdict(int)
+
+	resultCounts = defaultdict(int)
+
 	for _ in range(numOfRuns):
 		autoFailed, val = pullFromBag(bag.copy(), set())
+
+		resultCounts[val] += 1
 
 		if autoFailed:
 			autoFailCount += 1
 		else:
 			sumOfResults += val
 
-	print('Auto Fail Percent =', autoFailCount / numOfRuns * 100, '%')
-	print('Expected Value =', sumOfResults / (numOfRuns - autoFailCount))
+	autoFailChance = autoFailCount / numOfRuns
+	expectedValue = sumOfResults / (numOfRuns - autoFailCount)
+
+	print('Auto Fail Percent =', autoFailChance * 100, '%')
+	print('Expected Value =', expectedValue)
+
+	resultVals = sorted(list(resultCounts))
+	percents = [(resultCounts[result] / numOfRuns) - (resultCounts[result] / numOfRuns * autoFailChance)
+				for result in resultVals]
+
+	for i in range(len(percents) - 2, -1, -1):
+		percents[i] = percents[i] + percents[i + 1]
+
+	data = {
+		"y": percents,
+		"x": resultVals
+	}
+
+	df = pd.DataFrame(data)
+
+	print(df)
+	plt.grid()
+	sns.lineplot(data=df, y="y", x="x")
+	plt.xticks(resultVals)
+	plt.yticks([.1, .2, .3, .4, .5, .6, .7, .8, .9, 1.0])
+	plt.xlabel("Value of Bag Pull")
+	plt.ylabel("Likelihood")
+	plt.title("Chance of >= Value From Bag Pull")
+	plt.scatter(df['x'], df['y'], zorder=1)
+	plt.show()
