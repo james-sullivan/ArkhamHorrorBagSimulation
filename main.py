@@ -94,13 +94,14 @@ if __name__ == '__main__':
 		Token.MinusThree: 1,
 		Token.MinusFour: 2,
 		Token.MinusFive: 1,
-		Token.Frost: 6,
+		Token.Frost: 8,
 		Token.Skull: 2,
 		Token.Cultist: 2,
 		Token.Tablet: 1,
 		Token.Tentacle: 1,
 		Token.Star: 1,
-		Token.Curse: 0
+		Token.Curse: 10
+
 	}
 
 	bag = getBag(bagCount)
@@ -146,8 +147,9 @@ if __name__ == '__main__':
 	print(df)
 	plt.grid()
 	sns.lineplot(data=df, y="y", x="x")
-	plt.xticks(resultVals)
-	plt.yticks([.1, .2, .3, .4, .5, .6, .7, .8, .9, 1.0])
+	# plt.xticks(resultVals)
+	plt.xticks(resultVals[::2])
+	plt.yticks([0, .1, .2, .3, .4, .5, .6, .7, .8, .9, 1.0])
 	plt.xlabel("Value of Bag Pull")
 	plt.ylabel("Likelihood")
 	plt.title("Chance of >= Value From Bag Pull")
