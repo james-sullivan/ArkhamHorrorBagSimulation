@@ -59,7 +59,7 @@ pullAgainTypes = {
 # Returns a tuple of a boolean and an int
 # If the boolean is True then this pull is an auto fail
 # If the boolean is False, then the int is the result of this pull
-def pullFromBag(curBag, pulledAlready, curVal=0):
+def pullFromBag(curBag: list, pulledAlready: set, curVal: int = 0) -> (bool, int):
 	tokenIndex = random.randint(0, len(curBag) - 1)
 
 	token = curBag[tokenIndex]
@@ -77,7 +77,7 @@ def pullFromBag(curBag, pulledAlready, curVal=0):
 		return False, curVal
 
 
-def getBag(bagDict):
+def getBag(bagDict: dict) -> list:
 	tempBag = []
 
 	for key in bagCount:
@@ -94,14 +94,13 @@ if __name__ == '__main__':
 		Token.MinusThree: 1,
 		Token.MinusFour: 2,
 		Token.MinusFive: 1,
-		Token.Frost: 8,
+		Token.Frost: 0,
 		Token.Skull: 2,
 		Token.Cultist: 2,
 		Token.Tablet: 1,
 		Token.Tentacle: 1,
 		Token.Star: 1,
-		Token.Curse: 10
-
+		Token.Curse: 0
 	}
 
 	bag = getBag(bagCount)
